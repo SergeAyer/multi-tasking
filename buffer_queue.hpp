@@ -26,47 +26,20 @@ public:
 
     void append(uint32_t datum)
     {
-        // make sure that we can produce without overflow
-        _inSemaphore.acquire();
-        
-        // lock buffer
-        _producerConsumerMutex.lock();
-
         _producerLed = LED_ON;
-        _buffer[_index] = datum;
-        _index++;
-
-        // unlock buffer 
-        _producerConsumerMutex.unlock();
-
-        // tell that one element is available for consumer
-        _outSemaphore.release();
-        
-        wait_us(computeRandomWaitTime(kApppendWaitTime));        
+        uint32_t datum_uint32t = datum;
+        _producerConsumerQueue.try_put_for(Kernel::wait_for_u32_forever, (uint32_t*) datum); 
+        wait_us(computeRandomWaitTime(kApppendWaitTime));
         _producerLed = LED_OFF;
     }
 
     uint32_t extract(void)
-    {      
-        // make sure that we can consume without underflow
-        _outSemaphore.acquire();
-        
-        // lock buffer
-        _producerConsumerMutex.lock();
-
+    {
         _consumerLed = LED_ON;
-        _index--;
         wait_us(computeRandomWaitTime(kExtractWaitTime));
-        int datum = _buffer[_index];
-        
-        // unlock buffer 
-        _producerConsumerMutex.unlock();
-
-        // tell that one element is available for producer
-        _inSemaphore.release();
-        
+        uint32_t datum = 0;
+        _producerConsumerQueue.try_get_for(Kernel::wait_for_u32_forever, (uint32_t**) &datum);  
         _consumerLed = LED_OFF;
-        
         return datum;
     }
 
@@ -77,7 +50,7 @@ public:
 
     int count()
     {
-        return _index;
+        return _producerConsumerQueue.count() - 1;
     }
 
 private:
@@ -86,11 +59,7 @@ private:
     static const std::chrono::microseconds kExtractWaitTime;
     DigitalOut _producerLed;
     DigitalOut _consumerLed;
-    Mutex _producerConsumerMutex;
-    Semaphore _outSemaphore {0};
-    Semaphore _inSemaphore {kBufferSize - 1};
-    uint32_t _buffer[kBufferSize] = {0};
-    int _index = 0;
+    Queue<uint32_t, kBufferSize> _producerConsumerQueue;
 };
 
 } // namespace multi_tasking

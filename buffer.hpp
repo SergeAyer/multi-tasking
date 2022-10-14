@@ -24,7 +24,7 @@ public:
         _consumerLed = LED_OFF;
     }
 
-    void append(int datum)
+    void append(uint32_t datum)
     {
         _producerLed = LED_ON;
         _buffer[_index] = datum;
@@ -33,7 +33,7 @@ public:
         _producerLed = LED_OFF;
     }
 
-    int extract(void)
+    uint32_t extract(void)
     {
         _consumerLed = LED_ON;
         _index--;
@@ -59,7 +59,7 @@ private:
     static const std::chrono::microseconds kExtractWaitTime;
     DigitalOut _producerLed;
     DigitalOut _consumerLed;
-    uint8_t _buffer[kBufferSize] = {0};
+    uint32_t _buffer[kBufferSize] = {0};
     int _index = 0;
 };
 
