@@ -13,7 +13,7 @@ int main()
     // use trace library for console output
     mbed_trace_init();
 
-    tr_debug("Clock update program started\n");
+    tr_debug("Clock update program started");
 
     // create and start a clock
     multi_tasking::Clock clock;
