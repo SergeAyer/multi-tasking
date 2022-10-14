@@ -17,7 +17,7 @@ int main()
     // use trace library for console output
     mbed_trace_init();
 
-    tr_debug("Deadlock program started\n");
+    tr_debug("Deadlock program started");
 
     // create a first deadlock instance
     multi_tasking::Deadlock deadlock0(0, "Thread0");

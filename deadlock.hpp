@@ -19,7 +19,7 @@ public:
     void start()
     {
         osStatus status = _thread.start(callback(this, &Deadlock::execute));
-        tr_debug("Thread %s started with status %d\n", _thread.get_name(), status);
+        tr_debug("Thread %s started with status %d", _thread.get_name(), status);
     }
 
     void wait()
@@ -32,23 +32,32 @@ private:
     {
         // enter the first critical section
         _mutex[_index].lock();
-        printf("Thread %d entered critical section %d\n", _index, _index);
+        tr_debug("Thread %d entered critical section %d", _index, _index);
 
         // perform some operations
         wait_us(kProcessingWaitTime.count());
-        printf("Thread %d processing in mutex %d done\n", _index, _index);
+        tr_debug("Thread %d processing in mutex %d done", _index, _index);
 
         // enter the second critical
         int secondIndex = (_index + 1) % kNbrOfMutexes;
+        tr_debug("Thread %d trying to enter critical section %d", _index, secondIndex);
         _mutex[secondIndex].lock();
-        printf("Thread %d entered critical section %d\n", _index, secondIndex);
+        tr_debug("Thread %d entered critical section %d", _index, secondIndex);
 
         // perform some operations
         wait_us(kProcessingWaitTime.count());
-        printf("Thread %d processing in mutex %d and %d done\n", _index, _index, secondIndex);
+        tr_debug("Thread %d processing in mutex %d and %d done", 
+                 _index, _index, secondIndex);
 
-        // exit critical sections
+        // exit the second critical section
         _mutex[secondIndex].unlock();
+        
+        // perform some operations
+        wait_us(kProcessingWaitTime.count());
+        tr_debug("Thread %d processing in mutex %d done", 
+                 _index, _index);
+
+        // exit the first critical section
         _mutex[_index].unlock();
     }
 
