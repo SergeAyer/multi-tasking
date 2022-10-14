@@ -25,5 +25,7 @@ int main()
     // or do busy waiting
     //while (true) {
     //}
+
+    return 0;
 }
 
