@@ -8,8 +8,6 @@
 #define TRACE_GROUP "main"
 #endif // MBED_CONF_MBED_TRACE_ENABLE
 
-#include "wait_on_button.hpp"
-
 // main() runs in its own thread in the OS
 int main()
 {
