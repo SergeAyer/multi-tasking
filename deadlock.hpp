@@ -38,7 +38,7 @@ private:
         wait_us(kProcessingWaitTime.count());
         tr_debug("Thread %d processing in mutex %d done", _index, _index);
 
-        // enter the second critical
+        // enter the second critical section
         int secondIndex = (_index + 1) % kNbrOfMutexes;
         tr_debug("Thread %d trying to enter critical section %d", _index, secondIndex);
         _mutex[secondIndex].lock();
