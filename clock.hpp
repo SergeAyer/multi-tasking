@@ -1,7 +1,7 @@
 #pragma once
 
-
 #include <chrono>
+
 class Clock {
 public:
     struct DateTimeType {
@@ -28,7 +28,8 @@ public:
         _ticker.attach(callback(this, &Clock::tickerUpdate), clockUpdateTimeout);
 
         // schedule an event every second for displaying the time on the console
-        _clockDisplayQueue.call_every(clockDisplayTimeout, callback(this, &Clock::getAndPrintDateTime));
+        _clockDisplayQueue.call_every(clockDisplayTimeout, 
+                                      callback(this, &Clock::getAndPrintDateTime));
         // dispatch events from the thread calling the start() method (main thread)
         _clockDisplayQueue.dispatch_forever();
     }
@@ -53,8 +54,9 @@ private:
 
     void updateCurrentTime()
     {
-        _currentTime.second += 
-          std::chrono::duration_cast<std::chrono::seconds>(clockUpdateTimeout).count();
+        _currentTime.second += std::chrono::duration_cast<std::chrono::seconds>(
+          clockUpdateTimeout).count();
+          
         if (_currentTime.second > 59) {
             _currentTime.second = 0;
             _currentTime.minute++;
