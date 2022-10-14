@@ -16,7 +16,7 @@ int main()
     tr_debug("Clock update program started\n");
 
     // create and start a clock
-    Clock clock;
+    multi_tasking::Clock clock;
     clock.start();
 
     return 0;

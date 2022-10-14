@@ -2,6 +2,8 @@
 
 #include <chrono>
 
+namespace multi_tasking {
+
 class Clock {
 public:
     struct DateTimeType {
@@ -56,7 +58,7 @@ private:
     {
         _currentTime.second += std::chrono::duration_cast<std::chrono::seconds>(
           clockUpdateTimeout).count();
-          
+
         if (_currentTime.second > 59) {
             _currentTime.second = 0;
             _currentTime.minute++;
@@ -79,3 +81,5 @@ private:
     static constexpr std::chrono::milliseconds clockUpdateTimeout = 1000ms;
     static constexpr std::chrono::milliseconds clockDisplayTimeout = 1000ms;
 };
+
+} // namespace multi_tasking

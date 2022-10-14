@@ -1,7 +1,9 @@
 #pragma once
 
-
 #include <chrono>
+
+namespace multi_tasking {
+
 class Clock {
 public:
     struct DateTimeType {
@@ -86,3 +88,5 @@ private:
     static constexpr std::chrono::milliseconds clockUpdateTimeout = 1000ms;
     static constexpr std::chrono::milliseconds clockDisplayTimeout = 1000ms;
 };
+
+} // namespace multi_tasking

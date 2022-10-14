@@ -7,6 +7,7 @@
 #if MBED_CONF_MBED_TRACE_ENABLE
 #define TRACE_GROUP "WaitOnButton"
 #endif // MBED_CONF_MBED_TRACE_ENABLE
+
 namespace multi_tasking {
 
 #if defined(TARGET_DISCO_L475VG_IOT01A)
