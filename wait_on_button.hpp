@@ -3,6 +3,7 @@
 #include "mbed.h"
 
 #include "mbed_trace.h"
+
 #if MBED_CONF_MBED_TRACE_ENABLE
 #define TRACE_GROUP "WaitOnButton"
 #endif // MBED_CONF_MBED_TRACE_ENABLE
@@ -17,7 +18,7 @@ class WaitOnButton
 {
 public:
     WaitOnButton(const char* threadName) :
-        _thread(osPriorityNormal, OS_STACK_SIZE, nullptr, threadName),
+        _thread(osPriorityBelowNormal, OS_STACK_SIZE, nullptr, threadName),
         _pushButton(PUSH_BUTTON) 
     {
         _pushButton.fall(callback(this, &WaitOnButton::buttonPressed));
@@ -41,11 +42,14 @@ private:
         while (true) {
             tr_debug("Waiting for button press\n");
             _eventFlags.wait_all(kPressedEventFlag);
-            tr_debug("Button pressed\n");
+            std::chrono::microseconds time = _timer.elapsed_time();
+            std::chrono::microseconds latency = time - _pressedTime;
+            tr_debug("Button pressed with response time: %lld usecs\n", latency.count());
         }
     }
 
     void buttonPressed() {    
+        _pressedTime = _timer.elapsed_time();
         _eventFlags.set(kPressedEventFlag);
     }
 

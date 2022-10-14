@@ -1,0 +1,76 @@
+#pragma once
+
+
+#include <chrono>
+class Clock {
+public:
+    struct DateTimeType {
+        uint32_t day;
+        uint32_t hour;
+        uint32_t minute;
+        uint32_t second;
+    };
+
+    Clock()
+    {
+        // initialize current time
+        _currentTime.day = 0;
+        _currentTime.hour = 10;
+        _currentTime.minute = 59;
+        _currentTime.second = 59;
+    }
+
+    void start()
+    {
+        // start a ticker thread for dispatching events that are queued in the tickerUpdate() method
+        _tickerThread.start(callback(&_tickerQueue, &EventQueue::dispatch_forever));
+        // call the tickerUpdate() method every second, for queueing an event to be dispatched by the ticker thread
+        _ticker.attach(callback(this, &Clock::tickerUpdate), std::chrono::milliseconds(1000));
+
+        // schedule an event every second for displaying the time on the console
+        _clockDisplayQueue.call_every(std::chrono::milliseconds(1000), callback(this, &Clock::getAndPrintDateTime));
+        // dispatch events from the thread calling the start() method (main thread)
+        _clockDisplayQueue.dispatch_forever();
+    }
+
+private:
+    void getAndPrintDateTime()
+    {
+        DateTimeType dt = {0};
+
+        dt.day = _currentTime.day;
+        dt.hour = _currentTime.hour;
+        dt.minute = _currentTime.minute;
+        dt.second = _currentTime.second;
+
+        printf("Day %d Hour %d min %d sec %d\n", dt.day, dt.hour, dt.minute, dt.second);
+    }
+
+    void tickerUpdate()
+    {
+        _tickerQueue.call(callback(this, &Clock::updateCurrentTime));
+    }
+
+    void updateCurrentTime()
+    {
+        _currentTime.second++;
+        if (_currentTime.second > 59) {
+            _currentTime.second = 0;
+            _currentTime.minute++;
+            if (_currentTime.minute > 59) {
+                _currentTime.minute = 0;
+                _currentTime.hour++;
+                if (_currentTime.hour > 23) {
+                    _currentTime.hour = 0;
+                    _currentTime.day++;
+                }
+            }
+        }
+    }
+
+    EventQueue _clockDisplayQueue;
+    Ticker _ticker;
+    EventQueue _tickerQueue;
+    Thread _tickerThread;
+    DateTimeType _currentTime;
+};
