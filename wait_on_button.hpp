@@ -19,7 +19,7 @@ class WaitOnButton
 {
 public:
     WaitOnButton(const char* threadName) :
-        _thread(osPriorityBelowNormal, OS_STACK_SIZE, nullptr, threadName),
+        _thread(osPriorityNormal, OS_STACK_SIZE, nullptr, threadName),
         _pushButton(PUSH_BUTTON) 
     {
         _pushButton.fall(callback(this, &WaitOnButton::buttonPressed));
