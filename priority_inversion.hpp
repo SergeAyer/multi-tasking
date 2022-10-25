@@ -5,7 +5,7 @@
 #include "mbed_trace.h"
 
 #if MBED_CONF_MBED_TRACE_ENABLE
-#define TRACE_GROUP "Deadlock"
+#define TRACE_GROUP "PriorityInversion"
 #endif // MBED_CONF_MBED_TRACE_ENABLE
 
 namespace multi_tasking {
@@ -22,7 +22,8 @@ public:
 
     void start()
     {
-        osStatus status = _thread.start(callback(this, &PriorityInversion::execute));
+        osStatus status = 
+        _thread.start(callback(this, &PriorityInversion::execute));
         tr_debug("Thread %s started with status %d", _thread.get_name(), status);
     }
 
@@ -34,27 +35,32 @@ public:
 private:
     void execute()
     {
-        tr_debug("Thread %s about to start processing with priority %d", _thread.get_name(), _thread.get_priority());
+        tr_debug("Thread %s about to start processing with priority %d", 
+                 _thread.get_name(), _thread.get_priority());
 
         // perform some operations
         wait_us(kProcessingWaitTime.count());
 
-        tr_debug("Thread %s about to enter critical section with priority %d", _thread.get_name(), _thread.get_priority());
+        tr_debug("Thread %s about to enter critical section with priority %d", 
+                 _thread.get_name(), _thread.get_priority());
 
         // enter the critical section
         _mutex.lock();
 
-        tr_debug("Thread %s entered critical section, priority %d", _thread.get_name(), _thread.get_priority());
+        tr_debug("Thread %s entered critical section, priority %d",
+                 _thread.get_name(), _thread.get_priority());
 
         // perform some operations
         wait_us(kProcessingWaitTime.count());
 
-        tr_debug("Thread %s about to exit critical section, priority %d", _thread.get_name(), _thread.get_priority());
+        tr_debug("Thread %s about to exit critical section, priority %d", 
+                 _thread.get_name(), _thread.get_priority());
 
         // exit the critical section
         _mutex.unlock();
 
-        tr_debug("Thread %s exited critical section, priority %d", _thread.get_name(), _thread.get_priority());
+        tr_debug("Thread %s exited critical section, priority %d",
+                 _thread.get_name(), _thread.get_priority());
     }
 
     Thread _thread;
