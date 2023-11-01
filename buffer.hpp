@@ -27,7 +27,7 @@
 
 namespace multi_tasking {
 
-#if defined(TARGET_DISCO_L475VG_IOT01A)
+#if defined(TARGET_DISCO_H747I)
 #define GREEN_LED LED2
 #define YELLOW_LED LED1
 #define LED_ON 1

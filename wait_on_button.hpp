@@ -33,7 +33,7 @@
 
 namespace multi_tasking {
 
-#if defined(TARGET_DISCO_L475VG_IOT01A)
+#if defined(TARGET_DISCO_H747I)
 #define PUSH_BUTTON BUTTON1
 #define POLARITY_PRESSED 0
 #endif
