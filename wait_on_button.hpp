@@ -18,7 +18,7 @@ namespace multi_tasking {
 class WaitOnButton 
 {
 public:
-    WaitOnButton(const char* threadName) :
+    explicit WaitOnButton(const char* threadName) :
         _thread(osPriorityNormal, OS_STACK_SIZE, nullptr, threadName),
         _pushButton(PUSH_BUTTON) 
     {
@@ -27,8 +27,7 @@ public:
         _pressedTime = std::chrono::microseconds::zero();
     }
 
-    void start() 
-    {
+    void start() {
         osStatus status = _thread.start(callback(this, &WaitOnButton::waitForButtonEvent));
         tr_debug("Thread %s started with status %d\n", _thread.get_name(), status);
     }
@@ -38,8 +37,7 @@ public:
     }
 
 private:
-    void waitForButtonEvent() 
-    {
+    void waitForButtonEvent() {
         while (true) {
             tr_debug("Waiting for button press\n");
             _eventFlags.wait_all(kPressedEventFlag);

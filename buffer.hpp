@@ -15,8 +15,7 @@ class Buffer {
 public:
     Buffer() :
         _producerLed(GREEN_LED),
-        _consumerLed(YELLOW_LED)
-    {
+        _consumerLed(YELLOW_LED) {
         // initialize random seed
         srand(time(NULL));
 
@@ -24,8 +23,7 @@ public:
         _consumerLed = LED_OFF;
     }
 
-    void append(uint32_t datum)
-    {
+    void append(uint32_t datum) {
         _producerLed = LED_ON;
         _buffer[_index] = datum;
         _index++;
@@ -33,8 +31,7 @@ public:
         _producerLed = LED_OFF;
     }
 
-    uint32_t extract(void)
-    {
+    uint32_t extract(void) {
         _consumerLed = LED_ON;
         _index--;
         wait_us(computeRandomWaitTime(kExtractWaitTime));
@@ -43,13 +40,11 @@ public:
         return datum;
     }
 
-    int computeRandomWaitTime(const std::chrono::microseconds &waitTime)
-    {
+    int computeRandomWaitTime(const std::chrono::microseconds &waitTime) {
         return rand() % waitTime.count() + waitTime.count();
     }
 
-    int count()
-    {
+    int count() {
         return _index;
     }
 

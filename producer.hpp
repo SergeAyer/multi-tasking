@@ -2,7 +2,7 @@
 
 #include "mbed_trace.h"
 
-#include "buffer.hpp"
+#include "buffer_solution.hpp"
 
 #if MBED_CONF_MBED_TRACE_ENABLE
 #undef TRACE_GROUP
@@ -13,34 +13,29 @@ namespace multi_tasking {
 
 class Producer {
 public:
-    Producer(Buffer &buffer) :
+    explicit Producer(Buffer &buffer) :
         _buffer(buffer),
-        _producerThread(osPriorityNormal, OS_STACK_SIZE, nullptr, "ProducerThread")
-    {
+        _producerThread(osPriorityNormal, OS_STACK_SIZE, nullptr, "ProducerThread") {
         // initialize random seed
         srand(time(NULL));
     }
 
-    void start()
-    {
+    void start() {
         _producerThread.start(callback(this, &Producer::producerMethod));
     }
 
-    void wait()
-    {
+    void wait() {
         _producerThread.join();
     }
 
 private:
-    int produce(void)
-    {
+    int produce(void) {
         wait_us(_buffer.computeRandomWaitTime(kProduceWaitTime));
         // Produce a random number ranging from 0 to kMaxRandomValue - 1
         return rand() % kMaxRandomValue;
     }
 
-    void producerMethod()
-    {
+    void producerMethod() {
         while (true) {
             int producerDatum = produce();
             _buffer.append(producerDatum);

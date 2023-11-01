@@ -16,25 +16,21 @@ public:
     static constexpr std::chrono::microseconds kProcessingWaitTime = 1000000us;
 
     PriorityInversion(osPriority priority, const char *threadName) :
-        _thread(priority, OS_STACK_SIZE, nullptr, threadName)
-    {
+        _thread(priority, OS_STACK_SIZE, nullptr, threadName) {
     }
 
-    void start()
-    {
+    void start() {
         osStatus status = 
         _thread.start(callback(this, &PriorityInversion::execute));
         tr_debug("Thread %s started with status %d", _thread.get_name(), status);
     }
 
-    void wait()
-    {
+    void wait() {
         _thread.join();
     }
 
 private:
-    void execute()
-    {
+    void execute() {
         tr_debug("Thread %s about to start processing with priority %d", 
                  _thread.get_name(), _thread.get_priority());
 

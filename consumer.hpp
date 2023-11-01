@@ -2,7 +2,7 @@
 
 #include "mbed_trace.h"
 
-#include "buffer.hpp"
+#include "buffer_solution.hpp"
 
 #if MBED_CONF_MBED_TRACE_ENABLE
 #undef TRACE_GROUP
@@ -13,32 +13,27 @@ namespace multi_tasking {
 
 class Consumer {
 public:
-    Consumer(Buffer &buffer) :
+    explicit Consumer(Buffer &buffer) :
         _buffer(buffer),
-        _consumerThread(osPriorityNormal, OS_STACK_SIZE, nullptr, "ConsumerThread")
-    {
+        _consumerThread(osPriorityNormal, OS_STACK_SIZE, nullptr, "ConsumerThread") {
     }
 
-    void start()
-    {
+    void start() {
         _consumerThread.start(callback(this, &Consumer::consumerMethod));
     }
 
-    void wait()
-    {
+    void wait() {
         _consumerThread.join();
     }
 
 private:
 
-    void consume(int datum)
-    {
+    void consume(int datum) {
         // does nothing
         wait_us(_buffer.computeRandomWaitTime(kConsumeWaitTime));
     }
 
-    void consumerMethod(void)
-    {
+    void consumerMethod(void) {
         while (true) {
             int consumerDatum = _buffer.extract();
             consume(consumerDatum);
@@ -46,8 +41,7 @@ private:
         }
     }
 
-    int computeRandomWaitTime(const std::chrono::microseconds &waitTime)
-    {
+    int computeRandomWaitTime(const std::chrono::microseconds &waitTime) {
         return rand() % waitTime.count() + waitTime.count();
     }
 

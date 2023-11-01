@@ -1,7 +1,8 @@
 #pragma once
 
-#include "mbed_trace.h"
+#include "mbed.h"
 
+#include "mbed_trace.h"
 #if MBED_CONF_MBED_TRACE_ENABLE
 #define TRACE_GROUP "Deadlock"
 #endif // MBED_CONF_MBED_TRACE_ENABLE
@@ -12,24 +13,20 @@ class Deadlock {
 public:
     Deadlock(int index, const char *threadName) :
         _index(index),
-        _thread(osPriorityNormal, OS_STACK_SIZE, nullptr, threadName)
-    {
+        _thread(osPriorityNormal, OS_STACK_SIZE, nullptr, threadName) {
     }
 
-    void start()
-    {
+    void start() {
         osStatus status = _thread.start(callback(this, &Deadlock::execute));
         tr_debug("Thread %s started with status %d", _thread.get_name(), status);
     }
 
-    void wait()
-    {
+    void wait() {
         _thread.join();
     }
 
 private:
-    void execute()
-    {
+    void execute() {
         // enter the first critical section
         _mutex[_index].lock();
         tr_debug("Thread %d entered critical section %d", _index, _index);
