@@ -32,8 +32,7 @@
 // declare static variables
 Mutex multi_tasking::Deadlock::_mutex[kNbrOfMutexes];
 
-// cppcheck-suppress unusedFunction
-int main_deadlock() {
+int main() {
     // use trace library for console output
     mbed_trace_init();
 

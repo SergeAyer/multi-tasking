@@ -38,8 +38,7 @@ namespace multi_tasking {
 #define POLARITY_PRESSED 0
 #endif
 
-class WaitOnButton 
-{
+class WaitOnButton {
 public:
     explicit WaitOnButton(const char* threadName) :
         _thread(osPriorityNormal, OS_STACK_SIZE, nullptr, threadName),

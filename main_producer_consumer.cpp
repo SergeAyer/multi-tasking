@@ -37,8 +37,7 @@ const std::chrono::microseconds multi_tasking::Buffer::kExtractWaitTime   = 5000
 const std::chrono::microseconds multi_tasking::Producer::kProduceWaitTime = 500000us;
 const std::chrono::microseconds multi_tasking::Consumer::kConsumeWaitTime = 50000us;
 
-// cppcheck-suppress unusedFunction
-int main_producer_consumer() {
+int main() {
     // use trace library for console output
     mbed_trace_init();
 

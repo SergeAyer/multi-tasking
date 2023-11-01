@@ -29,8 +29,7 @@
 #define TRACE_GROUP "main"
 #endif  // MBED_CONF_MBED_TRACE_ENABLE
 
-// cppcheck-suppress unusedFunction
-int main_clock() {
+int main() {
     // use trace library for console output
     mbed_trace_init();
 
