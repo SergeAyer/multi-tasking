@@ -51,21 +51,27 @@ public:
 
     void start() {
         osStatus status = _thread.start(callback(this, &WaitOnButton::waitForButtonEvent));
-        tr_debug("Thread %s started with status %d\n", _thread.get_name(), status);
+        tr_debug("Thread %s started with status %d", _thread.get_name(), status);
     }
 
-    void wait() {
+    void wait_started() {
+        _eventFlags.wait_any(kStartedEventFlag);
+    }
+
+    void wait_exit() {
         _thread.join();
     }
 
 private:
     void waitForButtonEvent() {
+        tr_debug("Waiting for button press");
+        _eventFlags.set(kStartedEventFlag);
         while (true) {
-            tr_debug("Waiting for button press\n");
             _eventFlags.wait_all(kPressedEventFlag);
             std::chrono::microseconds time = _timer.elapsed_time();
             std::chrono::microseconds latency = time - _pressedTime;
-            tr_debug("Button pressed with response time: %lld usecs\n", latency.count());
+            tr_debug("Button pressed with response time: %lld usecs", latency.count());
+            tr_debug("Waiting for button press");
         }
     }
 
@@ -75,6 +81,7 @@ private:
     }
 
     static constexpr uint8_t kPressedEventFlag = (1UL << 0);
+    static constexpr uint8_t kStartedEventFlag = (1UL << 1);
     Thread _thread;
     Timer _timer;
     std::chrono::microseconds _pressedTime;

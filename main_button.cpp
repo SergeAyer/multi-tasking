@@ -24,6 +24,7 @@
 #include "mbed.h"
 #include "mbed_trace.h"
 #include "wait_on_button.hpp"
+#include "memory_logger.hpp"
 #if MBED_CONF_MBED_TRACE_ENABLE
 #undef TRACE_GROUP
 #define TRACE_GROUP "main"
@@ -35,12 +36,22 @@ int main() {
 
     tr_debug("EventFlags program started\n");
 
+    // log thread statistics
+    advembsof::MemoryLogger memoryLogger;
+    memoryLogger.getAndPrintThreadStatistics();
+
     // create the WaitOnButton instance and start it
     multi_tasking::WaitOnButton waitOnButton("ButtonThread");
     waitOnButton.start();
 
+    // wait that the WaitOnButton thread started 
+    waitOnButton.wait_started();
+
+    // log thread statistics
+    memoryLogger.getAndPrintThreadStatistics();
+
     // wait for the thread to exit (will not because of infinite loop)
-    waitOnButton.wait();
+    waitOnButton.wait_exit();
     // or do busy waiting
     // while (true) {
     //}
