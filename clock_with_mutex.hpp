@@ -36,13 +36,7 @@ public:
         uint32_t second;
     };
 
-    Clock() {
-        // initialize current time
-        _currentTime.day = 0;
-        _currentTime.hour = 10;
-        _currentTime.minute = 59;
-        _currentTime.second = 59;
-    }
+    Clock() = default;
 
     void start() {
         // start a ticker thread for dispatching events that are queued in the tickerUpdate() method
@@ -101,7 +95,7 @@ private:
     Ticker _ticker;
     EventQueue _tickerQueue;
     Thread _tickerThread;
-    DateTimeType _currentTime;
+    DateTimeType _currentTime{ .day = 0, .hour = 10, .minute = 59, .second = 59};
     Mutex _currentTimeMutex;
     static constexpr std::chrono::milliseconds clockUpdateTimeout = 1000ms;
     static constexpr std::chrono::milliseconds clockDisplayTimeout = 1000ms;
