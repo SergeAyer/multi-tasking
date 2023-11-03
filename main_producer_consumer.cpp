@@ -33,9 +33,9 @@
 
 // declare static variables
 const std::chrono::microseconds multi_tasking::Buffer::kApppendWaitTime   = 500000us;
-const std::chrono::microseconds multi_tasking::Buffer::kExtractWaitTime   = 50000us;
+const std::chrono::microseconds multi_tasking::Buffer::kExtractWaitTime   = 500000us;
 const std::chrono::microseconds multi_tasking::Producer::kProduceWaitTime = 500000us;
-const std::chrono::microseconds multi_tasking::Consumer::kConsumeWaitTime = 50000us;
+const std::chrono::microseconds multi_tasking::Consumer::kConsumeWaitTime = 500000us;
 
 int main() {
     // use trace library for console output
