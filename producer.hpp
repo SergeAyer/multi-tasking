@@ -25,7 +25,7 @@
 
 #include "mbed_trace.h"
 
-#include "buffer_solution.hpp"
+#include "buffer.hpp"
 
 #if MBED_CONF_MBED_TRACE_ENABLE
 #undef TRACE_GROUP

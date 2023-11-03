@@ -21,7 +21,7 @@
  * @version 0.1.0
  ***************************************************************************/
 
-#include "buffer_solution.hpp"
+#include "buffer.hpp"
 #include "consumer.hpp"
 #include "mbed.h"
 #include "mbed_trace.h"
