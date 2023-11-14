@@ -28,38 +28,38 @@
 namespace multi_tasking {
 
 #if defined(TARGET_DISCO_H747I)
-#define GREEN_LED LED2
-#define YELLOW_LED LED1
-#define LED_ON 1
-#define LED_OFF 0
+#define GREEN_LED LED1
+#define BLUE_LED LED4
+static constexpr uint8_t kLedOn = 0;
+static constexpr uint8_t kLedOff = 1;
 #endif
 
 class Buffer {
 public:
     Buffer() :
         _producerLed(GREEN_LED),
-        _consumerLed(YELLOW_LED) {
+        _consumerLed(BLUE_LED) {
         // initialize random seed
         srand(time(NULL));
 
-        _producerLed = LED_OFF;
-        _consumerLed = LED_OFF;
+        _producerLed = kLedOff;
+        _consumerLed = kLedOff;
     }
 
     void append(uint32_t datum) {
-        _producerLed = LED_ON;
+        _producerLed = kLedOn;
         _buffer[_index] = datum;
         _index++;
         wait_us(computeRandomWaitTime(kApppendWaitTime));
-        _producerLed = LED_OFF;
+        _producerLed = kLedOff;
     }
 
     uint32_t extract(void) {
-        _consumerLed = LED_ON;
+        _consumerLed = kLedOn;
         _index--;
         wait_us(computeRandomWaitTime(kExtractWaitTime));
         int datum = _buffer[_index];
-        _consumerLed = LED_OFF;
+        _consumerLed = kLedOff;
         return datum;
     }
 
