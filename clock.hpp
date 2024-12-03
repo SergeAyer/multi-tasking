@@ -57,9 +57,6 @@ private:
 
         dt.day = _currentTime.day;
         dt.hour = _currentTime.hour;
-        
-        static constexpr std::chrono::microseconds waitTime = 1s;
-        wait_us(waitTime.count());
 
         dt.minute = _currentTime.minute;
         dt.second = _currentTime.second;
